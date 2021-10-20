@@ -13,47 +13,35 @@ import './characteristic_test.mocks.dart';
 import 'test_util/characteristic_generator.dart';
 import 'test_util/descriptor_generator.dart';
 
-@GenerateMocks(
-  [Peripheral, ManagerForDescriptor, DescriptorWithValue],
-  customMocks: [
-    MockSpec<Service>(returnNullOnMissingStub: true),
-  ]
-)
+@GenerateMocks([
+  Peripheral,
+  ManagerForDescriptor,
+  DescriptorWithValue
+], customMocks: [
+  MockSpec<Service>(returnNullOnMissingStub: true),
+])
 void main() {
   final peripheral = MockPeripheral();
   when(peripheral.toString()).thenReturn("mocked peripheral toString()");
-  final managerForCharacteristic =
-      MockManagerForCharacteristic();
-  when(
-    managerForCharacteristic.readCharacteristicForIdentifier(any, any, any)
-  ).thenAnswer(
-    (_) async => Uint8List.fromList([])
-  );
-  when(
-    managerForCharacteristic.monitorCharacteristicForIdentifier(any, any, any)
-  ).thenAnswer(
-    (_) => Stream.value(Uint8List.fromList([]))
-  );
-  when(
-    managerForCharacteristic.readDescriptorForCharacteristic(any, any, any)
-  ).thenAnswer(
-    (_) async => MockDescriptorWithValue()
-  );
-  when(
-    managerForCharacteristic.writeDescriptorForCharacteristic(any, any, any, any)
-  ).thenAnswer(
-    (_) async => MockDescriptorWithValue()
-  );
+  final managerForCharacteristic = MockManagerForCharacteristic();
+  when(managerForCharacteristic.readCharacteristicForIdentifier(any, any, any))
+      .thenAnswer((_) async => Uint8List.fromList([]));
+  when(managerForCharacteristic.monitorCharacteristicForIdentifier(
+          any, any, any))
+      .thenAnswer((_) => Stream.value(Uint8List.fromList([])));
+  when(managerForCharacteristic.readDescriptorForCharacteristic(any, any, any))
+      .thenAnswer((_) async => MockDescriptorWithValue());
+  when(managerForCharacteristic.writeDescriptorForCharacteristic(
+          any, any, any, any))
+      .thenAnswer((_) async => MockDescriptorWithValue());
   final characteristicGenerator =
       CharacteristicGenerator(managerForCharacteristic);
-  final descriptorGenerator =
-      DescriptorGenerator(MockManagerForDescriptor());
+  final descriptorGenerator = DescriptorGenerator(MockManagerForDescriptor());
   final service = MockService();
   when(service.peripheral).thenReturn(peripheral);
   when(service.toString()).thenReturn("mocked service toString()");
 
-  final characteristic =
-      characteristicGenerator.create(123, service);
+  final characteristic = characteristicGenerator.create(123, service);
 
   DescriptorWithValue createDescriptor(int seed) =>
       descriptorGenerator.create(seed, characteristic);
@@ -65,7 +53,8 @@ void main() {
     ].forEach(clearInteractions);
   });
 
-  test("descriptors returns a list of descriptors provided by manager", () async {
+  test("descriptors returns a list of descriptors provided by manager",
+      () async {
     //given
     when(managerForCharacteristic.descriptorsForCharacteristic(characteristic))
         .thenAnswer((_) => Future.value([
@@ -113,9 +102,7 @@ void main() {
     );
   });
 
-  test(
-      "read generates transactionId when it is not specified",
-      () {
+  test("read generates transactionId when it is not specified", () {
     //when
     characteristic.read();
 
@@ -126,9 +113,7 @@ void main() {
     );
   });
 
-  test(
-      "read generates unique transactionId for each operation",
-      () {
+  test("read generates unique transactionId for each operation", () {
     //when
     characteristic.read();
     characteristic.read();
@@ -374,11 +359,8 @@ void main() {
 
     //then
     var transactionIds = verify(
-      managerForCharacteristic.writeDescriptorForCharacteristic(
-          characteristic,
-          "123",
-          Uint8List.fromList([1, 2, 3, 4]),
-          captureThat(isNotNull)),
+      managerForCharacteristic.writeDescriptorForCharacteristic(characteristic,
+          "123", Uint8List.fromList([1, 2, 3, 4]), captureThat(isNotNull)),
     ).captured;
     expect(transactionIds[0], isNot(equals(transactionIds[1])));
   });

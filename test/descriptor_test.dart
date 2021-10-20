@@ -14,11 +14,8 @@ import './descriptor_test.mocks.dart';
 @GenerateMocks([ManagerForDescriptor, Characteristic])
 void main() {
   final managerForDescriptor = MockManagerForDescriptor();
-  when(
-    managerForDescriptor.readDescriptorForIdentifier(any, any)
-  ).thenAnswer(
-    (_) async => Uint8List.fromList([])
-  );
+  when(managerForDescriptor.readDescriptorForIdentifier(any, any))
+      .thenAnswer((_) async => Uint8List.fromList([]));
   DescriptorGenerator descriptorGenerator =
       DescriptorGenerator(managerForDescriptor);
 

@@ -7,10 +7,8 @@ import './characteristic_generator.mocks.dart';
 
 export './characteristic_generator.mocks.dart';
 
-@GenerateMocks(
-  [],
-  customMocks:[
-    MockSpec<ManagerForCharacteristic>(returnNullOnMissingStub: true),
+@GenerateMocks([], customMocks: [
+  MockSpec<ManagerForCharacteristic>(returnNullOnMissingStub: true),
 ])
 class CharacteristicGenerator {
   MockManagerForCharacteristic managerForCharacteristic;

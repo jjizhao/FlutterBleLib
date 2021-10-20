@@ -23,38 +23,22 @@ void main() {
   when(peripheral.toString()).thenReturn("mocked peripheral toString()");
   when(peripheral.identifier).thenReturn("mocked peripheral id");
   final managerForService = MockManagerForService();
-  when(
-    managerForService.readCharacteristicForService(any, any, any, any)
-  ).thenAnswer(
-    (_) async => MockCharacteristicWithValue()
-  );
-  when(
-    managerForService.readDescriptorForService(any, any, any, any)
-  ).thenAnswer(
-    (_) async => MockDescriptorWithValue()
-  );
-  when(
-    managerForService.writeCharacteristicForService(any, any, any, any, any, any)
-  ).thenAnswer(
-    (_) async => MockCharacteristicWithValue()
-  );
-  when(
-    managerForService.writeDescriptorForService(any, any, any, any, any)
-  ).thenAnswer(
-    (_) async => MockDescriptorWithValue()
-  );
-  when(
-    managerForService.monitorCharacteristicForService(any, any, any, any)
-  ).thenAnswer(
-    (_) => Stream.value(MockCharacteristicWithValue())
-  );
-  final managerForCharacteristic =
-      MockManagerForCharacteristic();
+  when(managerForService.readCharacteristicForService(any, any, any, any))
+      .thenAnswer((_) async => MockCharacteristicWithValue());
+  when(managerForService.readDescriptorForService(any, any, any, any))
+      .thenAnswer((_) async => MockDescriptorWithValue());
+  when(managerForService.writeCharacteristicForService(
+          any, any, any, any, any, any))
+      .thenAnswer((_) async => MockCharacteristicWithValue());
+  when(managerForService.writeDescriptorForService(any, any, any, any, any))
+      .thenAnswer((_) async => MockDescriptorWithValue());
+  when(managerForService.monitorCharacteristicForService(any, any, any, any))
+      .thenAnswer((_) => Stream.value(MockCharacteristicWithValue()));
+  final managerForCharacteristic = MockManagerForCharacteristic();
   final managerForDescriptor = MockManagerForDescriptor();
   final characteristicGenerator =
       CharacteristicGenerator(managerForCharacteristic);
-  final descriptorGenerator =
-      DescriptorGenerator(managerForDescriptor);
+  final descriptorGenerator = DescriptorGenerator(managerForDescriptor);
 
   Service service = Service.fromJson({
     "serviceId": 1,
